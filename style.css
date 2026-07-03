@@ -10,6 +10,13 @@ body {
     justify-content: center;
     min-height: 100vh;
     overflow-x: hidden;
+    body {
+    touch-action: manipulation;
+}
+
+.fruit-btn {
+    touch-action: manipulation;
+}
 }
 
 .game-container {
