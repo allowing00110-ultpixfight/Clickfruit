@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Fruit Game</title>
+    <link rel="stylesheet" href="style.css">  
+</head>
+<body>
+    <div class="game-container">
+        <h1>Fruit Clicker</h1>
+        <div class="stat-box">
+            Clicks: <span id="counter">0</span> | <span id="multiplier">x1.0</span>
+        </div>
+
+        <!-- Contenedor para los textos flotantes de puntos -->
+        <div id="effect-container"></div>
+
+        <!-- Botón principal de la fruta -->
+        <button id="click-btn" class="fruit-btn">🍎</button>
+
+        <!-- Mensaje de estado -->
+        <div id="message">Keep gathering!</div>
+
+        <!-- Botones de acción inferior -->
+        <div class="actions-container">
+            <button id="basket-btn" class="basket-btn">🧺 Open Basket</button>
+            <button id="donate-btn" class="donate-btn">🎁 Donate</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE LA CANASTA (COLECCIÓN) -->
+    <div id="collection-panel" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Basket</h2>
+                <button id="close-basket" class="close-btn">&times;</button>
+            </div>
+
+            <!-- Contenedor de pestañas -->
+            <div class="tabs-container">
+                <button id="tab-normal" class="tab-btn active">Normal</button>
+                <button id="tab-gold" class="tab-btn">Gold</button>
+                <button id="tab-gem" class="tab-btn">Gem</button>
+                <button id="tab-galaxy" class="tab-btn">Galaxy</button>
+                <button id="tab-rainbow" class="tab-btn">Rainbow</button>
+            </div>
+
+            <!-- Rejilla de frutas -->
+            <div class="grid-container">
+                <div id="fruit-grid" class="fruit-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
