@@ -101,6 +101,7 @@ function updateCollectionGrid() {
                         equippedFruitIndex = index;
                         fruitButton.textContent = fruit.emoji;
                         updateCollectionGrid();
+                        guardarProgreso();
                     });
                 }
                 item.appendChild(equipBtn);
@@ -217,6 +218,7 @@ fruitButton.addEventListener('click', () => {
 
     createFloatingEffect(`+${Math.floor(finalPoints)}`, clickType, currentEmoji);
     checkNextFruit();
+    guardarProgreso();
 });
 
 function checkNextFruit() {
@@ -263,22 +265,4 @@ function guardarProgreso() {
         goldDiscovered, gemDiscovered, galaxyDiscovered, rainbowDiscovered
     }));
 }
-
-function cargarProgreso() {
-    const data = localStorage.getItem('fruitClickerSave');
-    if (!data) return;
-    const s = JSON.parse(data);
-    clicks = s.clicks || 0;
-    highestFruitUnlocked = s.highestFruitUnlocked || 0;
-    equippedFruitIndex = s.equippedFruitIndex || 0;
-    goldDiscovered = s.goldDiscovered || goldDiscovered;
-    gemDiscovered = s.gemDiscovered || gemDiscovered;
-    galaxyDiscovered = s.galaxyDiscovered || galaxyDiscovered;
-    rainbowDiscovered = s.rainbowDiscovered || rainbowDiscovered;
-    counterElement.textContent = Math.floor(clicks);
-    multiplierElement.textContent = "x" + fruitProgression[equippedFruitIndex].bonus.toFixed(1);
-    fruitButton.textContent = fruitProgression[equippedFruitIndex].emoji;
-}
-
-cargarProgreso();
 setInterval(guardarProgreso, 1000);
