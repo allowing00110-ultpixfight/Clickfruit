@@ -336,3 +336,14 @@ resetBtn.addEventListener('click', () => {
 });
 
 checkFullCompletion(); // revisa al cargar la página, por si ya estaba completo
+document.getElementById('share-btn').addEventListener('click', () => {
+    const shareText = `¡Llevo ${Math.floor(clicks)} clicks en Fruit Clicker! 🍎 ¿Puedes superarme?`;
+    const shareUrl = window.location.href;
+
+    if (navigator.share) {
+        navigator.share({ title: 'Fruit Clicker', text: shareText, url: shareUrl });
+    } else {
+        navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+        alert('¡Copiado! Pégalo donde quieras compartirlo 📋');
+    }
+});
