@@ -234,28 +234,51 @@ function checkNextFruit() {
     }
 }
 multiplierElement.textContent = "x" + fruitProgression[equippedFruitIndex].bonus.toFixed(1);
-// === TOGGLE DARK / LIGHT MODE ===
-const themeToggle = document.getElementById('theme-toggle');
-const body = document.body;
+function cargarProgreso() {
+    const guardado = localStorage.getItem('fruitClickerSave');
+    if (!guardado) return; // No hay nada guardado todavía
 
-function updateThemeUI() {
-    if (body.classList.contains('light-mode')) {
-        themeToggle.textContent = '🌙';   // Modo claro → muestra luna
-    } else {
-        themeToggle.textContent = '☀️';   // Modo oscuro → muestra sol
-    }
+    const estado = JSON.parse(guardado);
+
+    clicks = estado.clicks || 0;
+    highestFruitUnlocked = estado.highestFruitUnlocked || 0;
+    equippedFruitIndex = estado.equippedFruitIndex || 0;
+    goldDiscovered = estado.goldDiscovered || Array(fruitProgression.length).fill(false);
+    gemDiscovered = estado.gemDiscovered || Array(fruitProgression.length).fill(false);
+    galaxyDiscovered = estado.galaxyDiscovered || Array(fruitProgression.length).fill(false);
+    rainbowDiscovered = estado.rainbowDiscovered || Array(fruitProgression.length).fill(false);
+
+    // Actualizar la pantalla con los datos cargados
+    counterElement.textContent = Math.floor(clicks);
+    multiplierElement.textContent = "x" + fruitProgression[equippedFruitIndex].bonus.toFixed(1);
+    fruitButton.textContent = fruitProgression[equippedFruitIndex].emoji;
 }
 
-function toggleTheme() {
-    body.classList.toggle('light-mode');
-    updateThemeUI();
-    localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+// Cargar el progreso apenas se abre la página
+cargarProgreso();
+// GUARDAR Y CARGAR PROGRESO (autosave)
+function guardarProgreso() {
+    localStorage.setItem('fruitClickerSave', JSON.stringify({
+        clicks, highestFruitUnlocked, equippedFruitIndex,
+        goldDiscovered, gemDiscovered, galaxyDiscovered, rainbowDiscovered
+    }));
 }
 
-// Inicializar tema
-if (localStorage.getItem('theme') === 'light') {
-    body.classList.add('light-mode');
+function cargarProgreso() {
+    const data = localStorage.getItem('fruitClickerSave');
+    if (!data) return;
+    const s = JSON.parse(data);
+    clicks = s.clicks || 0;
+    highestFruitUnlocked = s.highestFruitUnlocked || 0;
+    equippedFruitIndex = s.equippedFruitIndex || 0;
+    goldDiscovered = s.goldDiscovered || goldDiscovered;
+    gemDiscovered = s.gemDiscovered || gemDiscovered;
+    galaxyDiscovered = s.galaxyDiscovered || galaxyDiscovered;
+    rainbowDiscovered = s.rainbowDiscovered || rainbowDiscovered;
+    counterElement.textContent = Math.floor(clicks);
+    multiplierElement.textContent = "x" + fruitProgression[equippedFruitIndex].bonus.toFixed(1);
+    fruitButton.textContent = fruitProgression[equippedFruitIndex].emoji;
 }
-updateThemeUI();   // Asegura que el icono sea correcto al cargar
 
-themeToggle.addEventListener('click', toggleTheme);
+cargarProgreso();
+setInterval(guardarProgreso, 1000);
