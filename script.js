@@ -215,10 +215,18 @@ fruitButton.addEventListener('click', () => {
     let finalPoints = 1 * fruitProgression[equippedFruitIndex].bonus * specialMultiplier;
     clicks += finalPoints;
     counterElement.textContent = Math.floor(clicks);
+if (clickType !== 'normal') {
+        specialSound.currentTime = 0;
+        specialSound.play();
+    } else {
+        clickSound.currentTime = 0;
+        clickSound.play();
+    }
 
     createFloatingEffect(`+${Math.floor(finalPoints)}`, clickType, currentEmoji);
     checkNextFruit();
     guardarProgreso();
+    checkFullCompletion();
 });
 
 function checkNextFruit() {
@@ -236,6 +244,22 @@ function checkNextFruit() {
     }
 }
 multiplierElement.textContent = "x" + fruitProgression[equippedFruitIndex].bonus.toFixed(1);
+// ================================
+// GUARDAR Y CARGAR PROGRESO
+// ================================
+
+function guardarProgreso() {
+    const estado = {
+        clicks: clicks,
+        highestFruitUnlocked: highestFruitUnlocked,
+        equippedFruitIndex: equippedFruitIndex,
+        goldDiscovered: goldDiscovered,
+        gemDiscovered: gemDiscovered,
+        galaxyDiscovered: galaxyDiscovered,
+        rainbowDiscovered: rainbowDiscovered
+    };
+    localStorage.setItem('fruitClickerSave', JSON.stringify(estado));
+}
 function cargarProgreso() {
     const guardado = localStorage.getItem('fruitClickerSave');
     if (!guardado) return; // No hay nada guardado todavía
@@ -265,4 +289,50 @@ function guardarProgreso() {
         goldDiscovered, gemDiscovered, galaxyDiscovered, rainbowDiscovered
     }));
 }
+
+function cargarProgreso() {
+    const data = localStorage.getItem('fruitClickerSave');
+    if (!data) return;
+    const s = JSON.parse(data);
+    clicks = s.clicks || 0;
+    highestFruitUnlocked = s.highestFruitUnlocked || 0;
+    equippedFruitIndex = s.equippedFruitIndex || 0;
+    goldDiscovered = s.goldDiscovered || goldDiscovered;
+    gemDiscovered = s.gemDiscovered || gemDiscovered;
+    galaxyDiscovered = s.galaxyDiscovered || galaxyDiscovered;
+    rainbowDiscovered = s.rainbowDiscovered || rainbowDiscovered;
+    counterElement.textContent = Math.floor(clicks);
+    multiplierElement.textContent = "x" + fruitProgression[equippedFruitIndex].bonus.toFixed(1);
+    fruitButton.textContent = fruitProgression[equippedFruitIndex].emoji;
+}
+cargarProgreso();
 setInterval(guardarProgreso, 1000);
+// --- SONIDOS ---
+const clickSound = document.getElementById('click-sound');
+const specialSound = document.getElementById('special-sound');
+clickSound.volume = 0.4;
+specialSound.volume = 0.6;
+
+// --- BOTÓN DE REINICIO (solo visible al 100%) ---
+const resetBtn = document.getElementById('reset-btn');
+
+function checkFullCompletion() {
+    const allNormalUnlocked = highestFruitUnlocked === fruitProgression.length - 1;
+    const allGold = goldDiscovered.every(v => v === true);
+    const allGem = gemDiscovered.every(v => v === true);
+    const allGalaxy = galaxyDiscovered.every(v => v === true);
+    const allRainbow = rainbowDiscovered.every(v => v === true);
+
+    if (allNormalUnlocked && allGold && allGem && allGalaxy && allRainbow) {
+        resetBtn.style.display = 'inline-block';
+    }
+}
+
+resetBtn.addEventListener('click', () => {
+    if (confirm("¿Seguro que quieres reiniciar TODO tu progreso? Esto no se puede deshacer.")) {
+        localStorage.removeItem('fruitClickerSave');
+        location.reload();
+    }
+});
+
+checkFullCompletion(); // revisa al cargar la página, por si ya estaba completo
