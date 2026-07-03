@@ -334,7 +334,6 @@ resetBtn.addEventListener('click', () => {
         location.reload();
     }
 });
-
 checkFullCompletion(); // revisa al cargar la página, por si ya estaba completo
 document.getElementById('share-btn').addEventListener('click', () => {
     const shareText = `¡Llevo ${Math.floor(clicks)} clicks en Fruit Clicker! 🍎 ¿Puedes superarme?`;
